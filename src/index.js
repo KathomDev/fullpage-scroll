@@ -1,20 +1,13 @@
 import './styles/app.scss'
 import 'velocity-animate/velocity'
-import html2canvas from 'html2canvas'
 
-$.fn.scrollPreview = function () {
-  html2canvas(this[0], {allowTaint: true}).then(canvas => {
-    document.body.appendChild(canvas)
-  })
-}
-
-$.fn.createGhost = function () {
+$.fn.createOutline = function () {
   return $('<div>').height(this.height())
 }
 
 $.fn.heightFromContent = function () {
   this.each(function () {
-    $(this).height($(this).children('.section__content').height())
+    $(this).height($(this).children('.fullpage-scroll__section-content').height())
   })
 
   return this
@@ -32,47 +25,47 @@ $.fn.zIndexDescending = function () {
 
 $.fn.fullpageScroll = function () {
   let container = this
-  let sections = container.children('.section')
-  let lastScrollTop = $(document).scrollTop()
+  let sections = container.children('.fullpage-scroll__section')
+  let lastScrollTop = $(window).scrollTop()
 
   sections.heightFromContent().zIndexDescending()
-  container.createGhost().appendTo('body')
+  container.createOutline().appendTo('body')
 
   let upperSection = sections.first()
   let lowerSection = sections.eq(1)
 
   function getUpperSection() {
     return sections.filter(function () {
-      return $(document).scrollTop() >= $(this).position().top
+      return $(window).scrollTop() >= $(this).position().top
     }).last()
   }
 
   $(window).scroll(function () {
-    if (Math.abs(lastScrollTop - $(document).scrollTop()) < 5) {
+    if (Math.abs(lastScrollTop - $(window).scrollTop()) < 5) {
       return
     }
 
-    lastScrollTop = $(document).scrollTop()
+    lastScrollTop = $(window).scrollTop()
 
     container.velocity('stop')
-    upperSection.children('.section__content').velocity('stop')
-    lowerSection.children('.section__content').velocity('stop')
+    upperSection.children('.fullpage-scroll__section-content').velocity('stop')
+    lowerSection.children('.fullpage-scroll__section-content').velocity('stop')
+
+    upperSection = getUpperSection()
+    lowerSection = upperSection.next('.fullpage-scroll__section')
 
     container.velocity({
-      translateY: -$(document).scrollTop(),
+      translateY: -$(window).scrollTop(),
       translateZ: 0
     }, {duration: 0, delay: 0, easing: 'linear'})
 
-    upperSection = getUpperSection()
-    lowerSection = upperSection.next('.section')
-
-    upperSection.children('.section__content').velocity({
+    upperSection.children('.fullpage-scroll__section-content').velocity({
       translateY: 0,
       translateZ: 0
     }, {duration: 0, delay: 0, easing: 'linear'})
 
-    lowerSection.children('.section__content').velocity({
-      translateY: -upperSection.position().top - (upperSection.height() - $(document).scrollTop()),
+    lowerSection.children('.fullpage-scroll__section-content').velocity({
+      translateY: -upperSection.position().top - (upperSection.height() - $(window).scrollTop()),
       translateZ: 0
     }, {duration: 0, delay: 0, easing: 'linear'})
   })

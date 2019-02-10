@@ -1,27 +1,17 @@
 @import "~normalize.css/normalize";
 
-$section-background-colors: #CD241A, #FFFFFF, #00B2D3;
-
-@for $i from 1 through length($section-background-colors) {
-  .section:nth-of-type(#{$i}) {
-    .section__content {
-      background-color: nth($section-background-colors, $i);
-      box-shadow: 0 10px 30px 1px nth($section-background-colors, $i);
-    }
-  }
-}
-
 #main {
   position: fixed;
   width: 100%;
 }
 
-.section {
+.fullpage-scroll__section {
   position: relative;
   min-height: 100vh;
+  visibility: hidden;
 }
 
-.section__content {
+.fullpage-scroll__section-content {
   position: absolute;
   top: 0;
   left: 0;
