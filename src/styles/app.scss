@@ -1,13 +1,19 @@
 @import "~normalize.css/normalize";
 
-$section-background-colors: #FFFFFF, #CD241A, #00B2D3;
+$section-background-colors: #CD241A, #FFFFFF, #00B2D3;
 
 @for $i from 1 through length($section-background-colors) {
   .section:nth-of-type(#{$i}) {
     .section__content {
-      background-color: transparentize(nth($section-background-colors, $i), .5);
+      background-color: nth($section-background-colors, $i);
+      box-shadow: 0 10px 30px 1px nth($section-background-colors, $i);
     }
   }
+}
+
+#main {
+  position: fixed;
+  width: 100%;
 }
 
 .section {
@@ -20,7 +26,6 @@ $section-background-colors: #FFFFFF, #CD241A, #00B2D3;
   top: 0;
   left: 0;
   right: 0;
-  outline: 1px solid black;
   min-height: 100vh;
   background-position: center;
   background-size: cover;
